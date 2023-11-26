@@ -1,4 +1,4 @@
-package entity;
+package com.example.entity.db;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -7,9 +7,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -18,11 +15,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "recipes")
-public class Recipe {
+public class RecipeDB {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
     @Column(name = "name")
     private String name;
     @Column(name = "url")
@@ -34,17 +31,18 @@ public class Recipe {
     @Column(name = "is_vegetarian_dish")
     private boolean vegetarian_dish;
     @Column(name = "cooking_time")
-    private int cooking_time;
+    private Integer cooking_time;
 
     @OneToMany(mappedBy = "recipe",
             cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
-    private List<RecipeIngredient> recipeIngredients;
+            fetch = FetchType.LAZY)
+    private List<RecipeIngredientDB> recipeIngredients;
 
-    public Recipe() {
+    public RecipeDB() {
     }
 
-    public Recipe(String name, String url, String description, boolean hot_dish) {
+    @Deprecated
+    public RecipeDB(String name, String url, String description, boolean hot_dish) {
         this.name = name;
         this.url = url;
         this.description = description;
@@ -52,7 +50,8 @@ public class Recipe {
         this.vegetarian_dish = true;
     }
 
-    public Recipe(String name, String url, String description, boolean hot_dish, int cooking_time) {
+    @Deprecated
+    public RecipeDB(String name, String url, String description, boolean hot_dish, int cooking_time) {
         this.name = name;
         this.url = url;
         this.description = description;
@@ -61,11 +60,11 @@ public class Recipe {
         this.cooking_time = cooking_time;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -117,15 +116,15 @@ public class Recipe {
         this.cooking_time = cooking_time;
     }
 
-    public List<RecipeIngredient> getRecipeIngredients() {
+    public List<RecipeIngredientDB> getRecipeIngredients() {
         return recipeIngredients;
     }
 
-    public void setRecipeIngredients(List<RecipeIngredient> recipeIngredients) {
+    public void setRecipeIngredients(List<RecipeIngredientDB> recipeIngredients) {
         this.recipeIngredients = recipeIngredients;
     }
 
-    public void addRecipeIngredient(RecipeIngredient recipeIngredient) {
+    public void addRecipeIngredient(RecipeIngredientDB recipeIngredient) {
         if (this.recipeIngredients == null) {
             this.recipeIngredients = new ArrayList<>();
         }
@@ -137,12 +136,13 @@ public class Recipe {
     @Override
     public String toString() {
         return "Recipe{\n\r" +
-                "  name='" + name + "'\n\r" +
-                "  url='" + url + "'\n\r" +
-                "  description='" + description + "'\n\r" +
-                "  hot_dish=" + hot_dish + "\n\r" +
-                "  vegetarian_dish=" + vegetarian_dish + "\n\r" +
-                "  cooking_time=" + cooking_time + "\n\r" +
+                "id=" + id +
+                ", name='" + name + "'\n\r" +
+                ", url='" + url + "'\n\r" +
+                ", description='" + description + "'\n\r" +
+                ", hot_dish=" + hot_dish + "\n\r" +
+                ", vegetarian_dish=" + vegetarian_dish + "\n\r" +
+                ", cooking_time=" + cooking_time + "\n\r" +
                 '}';
     }
 }

@@ -1,5 +1,6 @@
-package entity;
+package com.example.entity.db;
 
+import com.example.entity.dto.MeasureDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,26 +10,36 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "measures")
-public class Measure {
+public class MeasureDB {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
     @Column(name = "name")
     private String name;
 
-    public Measure() {
+    public MeasureDB() {
     }
 
-    public Measure(String name) {
+    @Deprecated
+    public MeasureDB(String name) {
         this.name = name;
     }
 
-    public int getId() {
+    public MeasureDB(MeasureDTO measureDTO) {
+        if (measureDTO == null) {
+            return;
+        }
+
+        this.id = measureDTO.getId();
+        this.name = measureDTO.getName();
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -43,7 +54,8 @@ public class Measure {
     @Override
     public String toString() {
         return "Measure{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 '}';
     }
 }

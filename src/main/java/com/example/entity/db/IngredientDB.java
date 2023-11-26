@@ -1,5 +1,7 @@
-package entity;
+package com.example.entity.db;
 
+import com.example.entity.dto.IngredientDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,11 +18,11 @@ import java.util.Set;
 
 @Entity
 @Table(name = "ingredients")
-public class Ingredient {
+public class IngredientDB {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @Column(name = "name")
     private String name;
@@ -31,32 +33,45 @@ public class Ingredient {
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
                fetch = FetchType.EAGER)
     @JoinColumn(name = "measure_id")
-    private Measure measure;
+    private MeasureDB measure;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "ingredient",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
-    private Set<RecipeIngredient> recipeIngredients;
+    private Set<RecipeIngredientDB> recipeIngredients;
 
-    public Ingredient() {
+    public IngredientDB() {
     }
 
-    public Ingredient(String name, boolean vegetarian) {
+    @Deprecated
+    public IngredientDB(String name, boolean vegetarian) {
         this.name = name;
         this.vegetarian = vegetarian;
     }
 
-    public Ingredient(String name, boolean vegetarian, Measure measure) {
+    @Deprecated
+    public IngredientDB(String name, boolean vegetarian, MeasureDB measure) {
         this.name = name;
         this.vegetarian = vegetarian;
         this.measure = measure;
     }
 
-    public int getId() {
+    public IngredientDB(IngredientDTO ingredientDTO) {
+        if (ingredientDTO == null) {
+            return;
+        }
+
+        this.id = ingredientDTO.getId();
+        this.name = ingredientDTO.getName();
+        this.vegetarian = ingredientDTO.isVegetarian();
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -76,26 +91,27 @@ public class Ingredient {
         this.vegetarian = is_vegetarian;
     }
 
-    public Measure getMeasure() {
+    public MeasureDB getMeasure() {
         return measure;
     }
 
-    public void setMeasure(Measure measure) {
+    public void setMeasure(MeasureDB measure) {
         this.measure = measure;
     }
 
-    public Set<RecipeIngredient> getRecipeIngredients() {
+    public Set<RecipeIngredientDB> getRecipeIngredients() {
         return recipeIngredients;
     }
 
-    public void setRecipeIngredients(Set<RecipeIngredient> recipeIngredients) {
+    public void setRecipeIngredients(Set<RecipeIngredientDB> recipeIngredients) {
         this.recipeIngredients = recipeIngredients;
     }
 
     @Override
     public String toString() {
         return "Ingredient{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", vegetarian=" + vegetarian +
                 ", measure=" + measure +
                 '}';

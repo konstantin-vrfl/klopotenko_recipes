@@ -1,8 +1,9 @@
+package com.example.demo;
 
-import entity.Ingredient;
-import entity.Measure;
-import entity.Recipe;
-import entity.RecipeIngredient;
+import com.example.entity.db.IngredientDB;
+import com.example.entity.db.MeasureDB;
+import com.example.entity.db.RecipeDB;
+import com.example.entity.db.RecipeIngredientDB;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -12,16 +13,16 @@ public class DemoDelete {
 
         try (SessionFactory sessionFactory = new Configuration()
                 .configure("hibernate.cfg.xml")
-                .addAnnotatedClass(Measure.class)
-                .addAnnotatedClass(Ingredient.class)
-                .addAnnotatedClass(RecipeIngredient.class)
-                .addAnnotatedClass(Recipe.class)
+                .addAnnotatedClass(MeasureDB.class)
+                .addAnnotatedClass(IngredientDB.class)
+                .addAnnotatedClass(RecipeIngredientDB.class)
+                .addAnnotatedClass(RecipeDB.class)
                 .buildSessionFactory();
 
              Session session = sessionFactory.getCurrentSession()) {
 
             session.beginTransaction();
-            Recipe recipe = session.get(Recipe.class, 11);
+            RecipeDB recipe = session.get(RecipeDB.class, 11);
             session.remove(recipe);
 
             session.getTransaction().commit();
